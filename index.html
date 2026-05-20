@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Central de Dados - Simulador Estadístico</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="hub-container">
+    <aside class="sidebar" id="sidebar">
+        <h2>Conexión Móvil</h2>
+        <div class="connection-status">
+            <button id="btnConnectHub" class="btn-primary">Conectar al Servidor</button>
+            <div id="hubStatus" class="status-badge disconnected">Desconectado</div>
+        </div>
+
+        <div class="session-box">
+            <p>ID de Sesión:</p>
+            <strong id="sessionCodeDisplay">...</strong>
+        </div>
+
+        <div class="qr-container">
+            <div id="qrcode"></div>
+            <p class="qr-hint">Escanea este QR para controlar desde tu smartphone.</p>
+        </div>
+
+        <div class="connected-devices">
+            <div id="deviceCountBadge" class="device-badge">0 Teléfonos activos</div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="main-header">
+            <div class="header-left">
+                <button id="btnToggleSidebar" class="btn-toggle">Ocultar Conexión</button>
+                <h1>Simulador Estadístico</h1>
+            </div>
+            <div class="header-right">
+                <div class="tiros-counter">Tiros totales: <strong id="totalTirosTxt">0</strong></div>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" id="btnTabSim">Simulador</button>
+            <button class="tab-btn" id="btnTabFreq">Frecuencias</button>
+            <button class="tab-btn" id="btnTabStats">Estadísticas</button>
+            <button class="tab-btn" id="btnTabAcum">Distribución</button>
+        </div>
+
+        <div id="tab-sim" class="tab-content active">
+            <div class="dice-area" id="diceArea">
+                <div class="dice-controls">
+                    <select id="diceTypeSelect" class="dice-type-select">
+                        <option value="4">D4</option>
+                        <option value="6" selected>D6</option>
+                        <option value="8">D8</option>
+                        <option value="10">D10</option>
+                        <option value="12">D12</option>
+                        <option value="20">D20</option>
+                    </select>
+                    <div class="dice-controls-buttons">
+                        <button class="btn-circle btn-add" id="btnAddDice">+</button>
+                        <button class="btn-circle btn-remove" id="btnRemoveDice">-</button>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-tirar" id="btnPcRoll">Tirar Dados</button>
+                <button class="btn-custom" id="btnOpenModal">Tiros Personalizados</button>
+                <button class="btn-clear" id="btnClearData">Limpiar Datos</button>
+            </div>
+        </div>
+
+        <div id="tab-freq" class="tab-content">
+            <div class="chart-controls">
+                <button class="view-toggle" id="btnViewSumas">Sumas</button>
+                <button class="view-toggle" id="btnViewCombos">Combinaciones</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="histograma"></canvas>
+            </div>
+            <div class="table-container">
+                <table id="tablaResultados">
+                    <thead><tr><th>Resultado</th><th>Frecuencia</th></tr></thead>
+                    <tbody id="tbodyResultados"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-stats" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Esperanza / Media (μ)</h3>
+                    <p>Teórica: <strong id="statTeoMedia">0</strong></p>
+                    <p>Experimental: <strong id="statExpMedia">0</strong></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Varianza (σ²)</h3>
+                    <p>Teórica: <strong id="statTeoVar">0</strong></p>
+                    <p>Experimental: <strong id="statExpVar">0</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-acum" class="tab-content">
+            <div class="chart-container">
+                <canvas id="chartAcumulativa"></canvas>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal" id="pcWeightsModal">
+    <div class="modal-content">
+        <h2>Configuración de Tiros Personalizados</h2>
+        <div class="input-group">
+            <label><strong>Número de Tiradas:</strong></label>
+            <input type="number" id="numTiradasCustom" value="1000">
+        </div>
+        <div class="config-section">
+            <label>Selecciona dados:</label>
+            <div id="pcDiceCheckboxes" class="dice-selectors"></div>
+            <label>Asigna pesos a caras:</label>
+            <div id="dynamicWeightInputs" class="config-grid"></div>
+        </div>
+        <div class="modal-actions">
+            <button id="btnPcApplyWeights">Ejecutar Simulación</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
