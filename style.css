@@ -92,15 +92,18 @@ body {
     margin-bottom: -3px; 
 }
 
+/* Layout fix: ensure active tab content can allocate space to its children (chart + table)
+   and that the table-container becomes scrollable so the table is visible. */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.25s ease-out; 
     flex-direction: column; 
     flex: 1; 
-    height: calc(100vh - 200px); 
-    overflow-y: auto; 
+    /* Slightly smaller subtraction so header + tabs fit reliably */
+    height: calc(100vh - 180px); 
+    overflow: visible; 
 }
-.tab-content.active { display: flex; }
+.tab-content.active { display: flex; flex-direction: column; overflow: visible; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -403,9 +406,17 @@ button:active { transform: translate(1px, 1px); }
     margin-bottom: 15px; 
 }
 
+/* Ensure table is visible: the container must be a scrollable box inside the tab. */
 .table-container {
     flex: 1;
     overflow-y: auto;
+    position: relative;
+    min-height: 140px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    margin-top: 10px;
+    background: var(--surface);
+    padding: 8px;
 }
 
 table { 
@@ -413,7 +424,7 @@ table {
     border-collapse: collapse; 
     text-align: center; 
     font-size: 14px; 
-    background: var(--surface);
+    background: transparent;
 }
 
 th { 
@@ -424,6 +435,7 @@ th {
     top: 0; 
     border-bottom: 2px solid var(--border); 
     font-weight: 700;
+    z-index: 2;
 }
 
 td { 
